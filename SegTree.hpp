@@ -84,6 +84,22 @@ class SegTree {
     return GetSum(1, l, r);
   }
 
+  void Change(size_t i, const T& val) {
+    if (i < 0 || i >= v_.size() / 2) {
+      throw std::runtime_error("Nice joke with indexes!");
+    }
+
+    size_t node = v_.size() / 2 + i;
+    v_[node].sum = val;
+    v_[node].min = val;
+
+    while (node > 1) {
+      node /= 2;
+      v_[node].sum = sum_(v_[2 * node].sum, v_[2 * node + 1].sum);
+      v_[node].min = min_(v_[2 * node].min, v_[2 * node + 1].min);
+    }
+  }
+
  private:
   T GetMin(size_t node, size_t l, size_t r);
   T GetSum(size_t node, size_t l, size_t r);
